@@ -1,0 +1,149 @@
+<html> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <body id="main">
+    <!-- BUTTON IN CIMA ALLA PAGINA, CONFIGURAZIONE DATABASE -->
+    <div style="text-align:center">
+        <button class="ripple btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <i class="fa fa-server" aria-hidden="true"></i> Configura DB
+        </button>
+    </div>
+
+</br>
+<section> 
+    <h3 style="opacity: 0.9; text-align: center" class="well" ng-show="database.ip"> http://{{ database.ip }}:{{ database.porta }}/{{ database.dbname }} </h3>
+        <div class="collapse" id="collapseExample">
+            <!-- FORM DI INSERIMENTO DEI CAMPI -->
+            <form ng-submit="ng-submit()" class="well" style="opacity: 0.9">  
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="user" type="text" value="root" class="form-control" name="user" placeholder="inserisci username" ng-model="database.user">
+                </div>
+  
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="password" type="password" value="root" class="form-control" name="password" placeholder="inserisci password" ng-model="database.password">
+                </div>
+  
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input id="url" type="text" value="localhost" class="form-control" name="url" placeholder="ip" ng-model="database.ip">
+                </div>
+      
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-asterisk"></i></span>
+                        <input id="port" type="text" value="80"class="form-control" name="port" placeholder="porta" ng-model="database.porta">
+                </div>  
+    
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-tasks"></i></span>
+                        <input id="db" type="text" value="mainsim3_demo2" class="form-control" name="db" placeholder="database" ng-model="database.dbname">
+                </div>
+
+</br></br>
+                <!-- BUTTON PER SALVARE E CHIUDERE IL FORM -->
+                <button type="submit" class="btn btn-success"  ng-click="saveForm()" data-toggle="collapse" data-target="#collapseExample" data-placement="bottom">
+                    <i class="fa fa-save"></i> Salva
+                </button>
+                <!-- BUTTON PER ELIMINARE I CAMPI NEL FORM -->
+                <a class="ripple btn btn-danger" ng-click="cleanForm()">
+                    <i class="fa fa-trash"></i> Elimina
+                </a>
+            </form>
+    
+        </div>
+</section>
+
+</br>
+<!-- SOTTOMENU CON LE FUNZIONI DI RICERCA F-CODE E OPZIONI PER IL DATABASE -->
+<div class="well" style="opacity: 0.9; text-align: center">
+    <ul class="nav nav-tabs">
+        <li role="presentation" data-toggle="tab" class="ripple active"><a ng-click="box='code'">Ricerca</a></li>
+        <li role="presentation" data-toggle="tab" class="ripple"><a ng-click="box='db'">Database</a></li>
+    </ul>
+
+</br></br></br>
+<!-- RIQUADRO DI RICERCA TRAMITE F-CODE -->
+<div class="row tab-content">
+    <div class="col-lg-6 tab-pane fade in active" ng-show="!box || box=='code'">
+        <div class="input-group col-lg-6">
+            <div class="input-group-addon">
+                <i class="fa fa-barcode" aria-hidden="true"></i>
+            </div>
+        <input id="fcode" ng-model="action.search" type="text" class="form-control" name="user" placeholder="inserisci f_code">
+            <div class="input-group-btn">
+                <button class="ripple btn btn-default" type="button" ng-click="searchByFcode('rxcode')" ng-click="searchDB()">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        </br></br>
+            <!-- NG-REPEAT DI CHIAVE E VALORE DELL'OGGETTO RELATIVO ALL'F-CODE -->
+            <div class="well form-inline" ng-repeat="(k,v) in row">
+                <label> {{ k }}: </label>
+                <span> {{ v }} </span>
+            </div>
+    </div>
+<!-- RIQUADRO DELLE OPZIONI PER IL DATABASE -->
+    <div class="col-lg-6 tab-pane fade in active" ng-show="box==='db'">
+        <div class="input-group col-lg-12" >
+            <div class="input-group-addon">
+                <i class="fa fa-database" aria-hidden="true"></i>
+            </div>
+            <input id="backupdb" type="text" class="form-control" name="user" placeholder="nome database" ng-model="database.dbname">
+                <div class="input-group-btn">
+                    <button class="ripple btn btn-default" ng-click="showBackupList('showb')" type="button">Aggiorna lista backup</button>
+                    <button class="ripple btn btn-default" ng-click="requestBackup('backup')" type="button">Genera backup</button>
+                </div>
+        </div>
+
+        </br></br>
+        <!-- NG-REPEAT DELL'ARRAY DI OGGETTI CON CHIAVE E VALORE RELATIVO AL DATABASE SELEZIONATO -->
+        <div class="well form-inline" ng-repeat="obj in list">
+            <div ng-repeat="(k,v) in obj">
+                <label> {{ k }}: </label>
+                <span> {{ v }} </span>
+            </div> 
+
+            </br></br>
+            <!-- I TRE BUTTON DI RIPRISTINO, DOWNLOAD E ELIMINAZIONE DEL BACKUP -->
+                <button class="btn btn-warning" disabled="disabled" ng-click="recoverBackup('backdw', v)" value="backup" type="button">
+                    <i class="ripple fa fa-refresh"></i> Ripristina backup
+                </button>
+                
+                <a class="btn btn-info" href="http://10.0.245.77/msDebug/{{ obj.fullpath }}" download>
+                    <i class="ripple fa fa-cloud-download"></i> Download backup
+                </a>
+       
+            
+                <button class="btn btn-danger" ng-click="deleteBackup('deleteb', obj.filename)" value="backup" type="button">
+                    <i class="ripple fa fa-trash"></i> Elimina backup
+                </button>
+ 
+        </div>
+    </div>
+</div>
+
+</br></br></br>
+    
+</div>
+
+</body>
+
+
+
+    <!--    <table ng-table show-filter="true" class="table table-striped">
+            <thead>
+                <tr>
+                    <th ng-repeat="(k, v) in row[0]"> {{ k }} </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="element in row"> 
+                    <td ng-repeat="(k, v) in element">
+                        {{ v }}
+                    </td>
+                </tr>
+            <tbody>
+        </table> -->

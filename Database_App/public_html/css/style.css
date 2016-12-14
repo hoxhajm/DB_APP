@@ -1,0 +1,53 @@
+html{
+    overflow-y: scroll;
+}
+
+body{
+    font-family:"tahoma","verdana";
+    background: url("img/home.jpg");
+    background-repeat:no-repeat;
+    background-attachment: fixed;
+}
+
+#main {
+    background: url("img/main.jpg");
+}
+
+#all{
+    padding-top:70px
+}
+
+.btn-round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.btn-round.btn-lg {
+    width: 100px;
+    height: 100px;
+}
+
+.btn-round.btn-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.btn-round.btn-xs {
+    width: 24px;
+    height: 24px;
+}
+
+.table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+  table-layout: auto;
+  
+}
+.table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+.table tr:nth-child(even) {
+  background-color: #ffffff;
+}
